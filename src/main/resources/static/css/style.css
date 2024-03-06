@@ -1,0 +1,10 @@
+@charset "UTF-8";
+
+#wrap {
+	width:800px;
+	margin:0 auto;
+}
+
+.login-box {
+	width:400px;
+}
