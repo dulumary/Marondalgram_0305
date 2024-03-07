@@ -35,7 +35,7 @@
 						<input type="text" id="nameInput" class="form-control mt-3" placeholder="이름">
 						<input type="text" id="emailInput" class="form-control mt-3" placeholder="이메일">
 						
-						<button type="button" id="signUpBtn" class="btn btn-info btn-block mt-3">회원가입</button>
+						<button type="button" id="joinBtn" class="btn btn-info btn-block mt-3">회원가입</button>
 				
 					</div>
 					
@@ -52,6 +52,62 @@
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js" integrity="sha384-+sLIOodYLS7CIrQpBjl+C7nPvqq+FbNUBDunl/OZv93DB7Ln/533i8e/mZXLi/P+" crossorigin="anonymous"></script>
+<script>
+	$(document).ready(function() {
+		$("#joinBtn").on("click", function() {
+			let id = $("#loginIdInput").val();
+			let password = $("#passwordInput").val();
+			let passwordConfirm = $("#passwordConfirmInput").val();
+			let name = $("#nameInput").val();
+			let email = $("#emailInput").val();
+			
+			if(id == "") {
+				alert("아이디를 입력하세요");
+				return;
+			}
+			
+			if(password == "") {
+				alert("비밀번호를 입력하세요");
+				return;
+			}
+			
+			if(password != passwordConfirm) {
+				alert("비밀번호가 일치하지 않습니다");
+				return ;
+			}
+			
+			if(name == "") {
+				alert("이름을 입력하세요");
+				return ;
+			}
+			
+			if(email == "") {
+				alert("이메일을 입력하세요");
+				return ;
+			}
+			
+			$.ajax({
+				type:"post"
+				, url:"/user/join"
+				, data:{"loginId":id, "password":password, "name":name, "email":email}
+				, success:function(data) {
+					if(data.result == "success") {
+						location.href = "/user/login-view";
+					} else {
+						alert("회원가입 실패");
+					}
+				}
+				, error:function() {
+					alert("회원가입 에러");
+				}
+			});
+			
+			
+		});
+		
+	});
 
+
+</script>
 </body>
 </html>
