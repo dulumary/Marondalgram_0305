@@ -25,8 +25,10 @@
 						
 						<div class="d-flex mt-3 justify-content-between">
 							<input type="text" id="loginIdInput" class="form-control col-9" placeholder="아이디">
-							<button type="button" class="btn btn-info btn-sm">중복확인</button>
+							<button type="button" class="btn btn-info btn-sm" id="duplicateBtn">중복확인</button>
 						</div>
+						<div class="text-danger small d-none" id="duplicateText">중복된 ID 입니다</div>
+						<div class="text-success small d-none" id="availableText">사용가능한 ID 입니다.</div>
 						
 					
 						<input type="password" id="passwordInput" class="form-control mt-3" placeholder="패스워드">
@@ -54,6 +56,57 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js" integrity="sha384-+sLIOodYLS7CIrQpBjl+C7nPvqq+FbNUBDunl/OZv93DB7Ln/533i8e/mZXLi/P+" crossorigin="anonymous"></script>
 <script>
 	$(document).ready(function() {
+		
+		// 중복확인 체크 여부
+		var isDuplicateCheck = false;
+		
+		// id 중복 여부 
+		var isDuplicateId = true;
+		
+		$("#loginIdInput").on("input", function() {
+			// 아이디 중복확인과 관련된 모든 부분을 초기화 한다. 
+			isDuplicateCheck = false;
+			isDuplicateId = true;
+			
+			$("#duplicateText").addClass("d-none");
+			$("#availableText").addClass("d-none");
+		});
+		
+		$("#duplicateBtn").on("click", function() {
+			let id = $("#loginIdInput").val();
+			
+			if(id == "") {
+				alert("아이디를 입력하세요");
+				return;
+			}
+			
+			$.ajax({
+				type:"get"
+				, url:"/user/duplicate-id"
+				, data:{"loginId":id}
+				, success:function(data) {
+					
+					// 중복확인 체크 
+					isDuplicateCheck = true;
+					isDuplicateId = data.isDuplicate;
+					
+					if(data.isDuplicate) {
+						$("#duplicateText").removeClass("d-none");
+						$("#availableText").addClass("d-none");
+					} else {
+						$("#availableText").removeClass("d-none");
+						$("#duplicateText").addClass("d-none");
+					}
+					
+				}
+				, error:function() {
+					alert("중복확인 에러");
+				}
+			});
+			
+			
+		});
+		
 		$("#joinBtn").on("click", function() {
 			let id = $("#loginIdInput").val();
 			let password = $("#passwordInput").val();
@@ -65,6 +118,18 @@
 				alert("아이디를 입력하세요");
 				return;
 			}
+			
+			// id 중복확인 안한 경우 
+			if(!isDuplicateCheck) {
+				alert("아이디 중복 확인을 해주세요!");
+				return ;
+			}
+			
+			// id가 중복된 경우 
+			if(isDuplicateId) {
+				alert("아이디가 중복되었습니다");
+				return ;
+			} 
 			
 			if(password == "") {
 				alert("비밀번호를 입력하세요");

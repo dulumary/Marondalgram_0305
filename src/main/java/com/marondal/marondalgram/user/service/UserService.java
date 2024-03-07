@@ -18,5 +18,20 @@ public class UserService {
 		String encryptPassword = EncryptUtils.md5(password);
 		return userRepository.insertUser(loginId, encryptPassword, name, email);
 	}
+	
+	// 전달받은 loginId 값이 중복되었는지 알려주는 기능
+	public boolean isDuplicateId(String loginId) {
+		
+		int count = userRepository.selectCountByLoginId(loginId);
+		
+		if(count >= 1) {
+			// 중복
+			return true;
+		} else {
+			// 중복 아님
+			return false;
+		}
+		
+	}
 
 }
