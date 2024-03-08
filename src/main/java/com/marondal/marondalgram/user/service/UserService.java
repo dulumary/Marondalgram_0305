@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.marondal.marondalgram.common.EncryptUtils;
+import com.marondal.marondalgram.user.domain.User;
 import com.marondal.marondalgram.user.repository.UserRepository;
 
 @Service
@@ -32,6 +33,12 @@ public class UserService {
 			return false;
 		}
 		
+	}
+	
+	public User getUser(String loginId, String password) {
+		
+		String encryptPassword = EncryptUtils.md5(password);		
+		return userRepository.selectUser(loginId, encryptPassword);
 	}
 
 }
