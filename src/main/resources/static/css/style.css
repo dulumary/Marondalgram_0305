@@ -5,6 +5,14 @@
 	margin:0 auto;
 }
 
+.main-contents {
+	width:430px;
+}
+
 .login-box {
 	width:400px;
+}
+
+.big-font {
+	font-size:30px;
 }

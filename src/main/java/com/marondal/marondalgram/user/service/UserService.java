@@ -40,5 +40,8 @@ public class UserService {
 		String encryptPassword = EncryptUtils.md5(password);		
 		return userRepository.selectUser(loginId, encryptPassword);
 	}
-
+	
+	public User getUserById(int id) {
+		return userRepository.selectUserById(id);
+	}
 }
