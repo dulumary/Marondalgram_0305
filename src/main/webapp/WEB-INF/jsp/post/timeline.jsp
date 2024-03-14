@@ -45,7 +45,7 @@
 							<img class="w-100" src="${post.imagePath }">
 						</div>
 						<div class="p-2">
-							<i class="bi bi-heart"></i> 좋아요 11개
+							<i class="bi bi-heart like-icon" data-post-id="${post.postId }"></i> 좋아요 11개
 						</div>
 						
 						<div class="p-2">
@@ -60,7 +60,7 @@
 							</div>
 							<div class="d-flex justify-content-between">
 								<input type="text" class="form-control col-10">
-								<button type="button" class="btn btn-info col-2">게시</button>
+								<button type="button" class="btn btn-info col-2 comment-btn" data-post-id="${post.postId }">게시</button>
 							</div>
 						</div>
 					</div>
@@ -82,6 +82,45 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js" integrity="sha384-+sLIOodYLS7CIrQpBjl+C7nPvqq+FbNUBDunl/OZv93DB7Ln/533i8e/mZXLi/P+" crossorigin="anonymous"></script>
 <script>
 	$(document).ready(function() {
+		
+		$(".comment-btn").on("click", function() {
+			
+			let postId = $(this).data("post-id");
+			let contents = $(".comment-input").val();
+			
+			alert(contents);
+			/*
+			$.ajax({
+				type:"post"
+				, url:"/post/comment/create"
+				, data:{"postId":postId, "contents":}
+			});
+			*/
+		});
+		
+		$(".like-icon").on("click", function() {
+			
+			// 이벤트가 발생한 태그 객체 
+			// data-post-id
+			let postId = $(this).data("post-id");
+			
+			$.ajax({
+				type:"post"
+				, url:"/post/like"
+				, data:{"postId":postId}
+				, success:function(data) {
+					if(data.result == "success") {
+						location.reload();
+					} else {
+						alert("좋아요 실패");
+					}
+					
+				}
+				, error:function() {
+					alert("좋아요 에러");
+				}
+			});
+		});
 		
 		$("#imageIcon").on("click", function() {
 			
