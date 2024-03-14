@@ -23,7 +23,8 @@
 				<div class="input-box border rounded">
 					<textarea rows="4" class="form-control border-0" id="contentsInput"></textarea>
 					<div class="d-flex justify-content-between p-2">
-						<input type="file" id="fileInput">
+						<label for="fileInput"><i class="bi bi-image big-font" id="imageIcon"></i></label>
+						<input type="file" id="fileInput" class="d-none">
 						<button type="button" class="btn btn-info btn-sm" id="uploadInput">입력</button>
 					</div>
 					
@@ -81,6 +82,12 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js" integrity="sha384-+sLIOodYLS7CIrQpBjl+C7nPvqq+FbNUBDunl/OZv93DB7Ln/533i8e/mZXLi/P+" crossorigin="anonymous"></script>
 <script>
 	$(document).ready(function() {
+		
+		$("#imageIcon").on("click", function() {
+			
+			//$("#fileInput").click();
+			
+		});
 		
 		$("#uploadInput").on("click", function() {
 			

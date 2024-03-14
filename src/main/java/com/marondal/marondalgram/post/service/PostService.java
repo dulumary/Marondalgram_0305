@@ -47,7 +47,6 @@ public class PostService {
 			
 			int userId = post.getUserId();
 			User user = userService.getUserById(userId);
-			user.getLoginId();
 			
 			PostDetail postDetail = PostDetail.builder()
 										.postId(post.getId())
