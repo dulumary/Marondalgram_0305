@@ -45,7 +45,17 @@
 							<img class="w-100" src="${post.imagePath }">
 						</div>
 						<div class="p-2">
-							<i class="bi bi-heart like-icon" data-post-id="${post.postId }"></i> 좋아요 11개
+							
+							<c:choose>
+								<c:when test="${post.like }">
+									<i class="bi bi-heart-fill text-danger"></i>
+								</c:when>
+								<c:otherwise>
+									<i class="bi bi-heart like-icon" data-post-id="${post.postId }"></i>
+								</c:otherwise>
+							</c:choose>
+							 
+							좋아요 ${post.likeCount }개
 						</div>
 						
 						<div class="p-2">
@@ -59,7 +69,7 @@
 								<div><b>bada</b> 부러워요</div>
 							</div>
 							<div class="d-flex justify-content-between">
-								<input type="text" class="form-control col-10">
+								<input type="text" class="form-control col-10" id="commentInput${post.postId }">
 								<button type="button" class="btn btn-info col-2 comment-btn" data-post-id="${post.postId }">게시</button>
 							</div>
 						</div>
@@ -86,16 +96,29 @@
 		$(".comment-btn").on("click", function() {
 			
 			let postId = $(this).data("post-id");
-			let contents = $(".comment-input").val();
 			
-			alert(contents);
-			/*
+			// 클릭 이벤트가 발생한 버튼 태그 객체 
+			// post-id 
+			// 버튼 태그 옆에 있는 태그 
+			 let contents = $("#commentInput" + postId).val();
+			// let contents = $(this).prev().val();
+			
 			$.ajax({
 				type:"post"
 				, url:"/post/comment/create"
-				, data:{"postId":postId, "contents":}
+				, data:{"postId":postId, "contents":contents}
+				, success:function(data) {
+					if(data.result == "success") {
+						location.reload();
+					} else {
+						alert("댓글 쓰기 실패");
+					}
+				}
+				, error:function() {
+					alert("댓글 쓰기 에러");
+				}
 			});
-			*/
+			
 		});
 		
 		$(".like-icon").on("click", function() {

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.marondal.marondalgram.common.FileManager;
+import com.marondal.marondalgram.like.service.LikeService;
 import com.marondal.marondalgram.post.domain.Post;
 import com.marondal.marondalgram.post.dto.PostDetail;
 import com.marondal.marondalgram.post.repository.PostRepository;
@@ -22,6 +23,9 @@ public class PostService {
 	
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private LikeService likeService;
 	
 	public Post addPost(int userId, String contents, MultipartFile file) {
 		
@@ -38,7 +42,7 @@ public class PostService {
 	}
 	
 	// 등록 내림 차순으로 조회된 결과 돌려주는 기능
-	public List<PostDetail> getPostList() {
+	public List<PostDetail> getPostList(int loginUserId) {
 		List<Post> postList = postRepository.findAllByOrderByIdDesc();
 		
 		List<PostDetail> postDetailList = new ArrayList<>();
@@ -47,6 +51,10 @@ public class PostService {
 			
 			int userId = post.getUserId();
 			User user = userService.getUserById(userId);
+			// 좋아요 개수 조회 
+			int likeCount = likeService.getLikeCount(post.getId());
+			// 로그인한 사용자가 좋아요 했는지 여부 조회 
+			boolean isLike = likeService.isLike(loginUserId, post.getId());
 			
 			PostDetail postDetail = PostDetail.builder()
 										.postId(post.getId())
@@ -54,6 +62,8 @@ public class PostService {
 										.userLoginId(user.getLoginId())
 										.contents(post.getContents())
 										.imagePath(post.getImagePath())
+										.likeCount(likeCount)
+										.isLike(isLike)
 										.build();
 			
 			postDetailList.add(postDetail);
