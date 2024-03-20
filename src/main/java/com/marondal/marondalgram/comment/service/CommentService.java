@@ -56,5 +56,9 @@ public class CommentService {
 		return commentDetailList;
 	}
 	
+	public void deleteCommentByPostId(int postId) {
+		commentRepository.deleteByPostId(postId);
+	}
+	
 
 }

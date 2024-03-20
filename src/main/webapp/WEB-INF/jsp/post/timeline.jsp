@@ -39,7 +39,7 @@
 					<div class="card my-3">
 						<div class="d-flex justify-content-between p-2">
 							<div>${post.userLoginId }</div>
-							<i class="bi bi-three-dots-vertical"></i>
+							<i class="bi bi-three-dots-vertical more-icon" data-toggle="modal" data-target="#moreModal" data-post-id="${post.postId }"></i>
 						</div>
 						<div>
 							<img class="w-100" src="${post.imagePath }">
@@ -48,7 +48,7 @@
 							
 							<c:choose>
 								<c:when test="${post.like }">
-									<i class="bi bi-heart-fill text-danger"></i>
+									<i class="bi bi-heart-fill text-danger unlike-icon" data-post-id="${post.postId }"></i>
 								</c:when>
 								<c:otherwise>
 									<i class="bi bi-heart like-icon" data-post-id="${post.postId }"></i>
@@ -87,12 +87,60 @@
 		<c:import url="/WEB-INF/jsp/include/footer.jsp" />
 	</div>
 
+<!-- Modal -->
+<div class="modal fade" id="moreModal">
+  <div class="modal-dialog  modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-body text-center">
+        <a href="#" id="deleteBtn">삭제하기</a>
+      </div>
+    </div>
+  </div>
+</div>
+
 
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js" integrity="sha384-+sLIOodYLS7CIrQpBjl+C7nPvqq+FbNUBDunl/OZv93DB7Ln/533i8e/mZXLi/P+" crossorigin="anonymous"></script>
 <script>
 	$(document).ready(function() {
+		
+		$("#deleteBtn").on("click", function(e) {
+			
+			// 원래 이벤트에 부여된 기능 취소
+			e.preventDefault();
+			
+			let postId = $(this).data("post-id");
+			
+			$.ajax({
+				type:"delete"
+				, url:"/post/delete"
+				, data:{"id":postId}
+				, success:function(data) {
+					if(data.result == "success") {
+						location.reload();
+					} else {
+						alert("삭제 실패!");
+					}
+				}
+				, error:function() {
+					alert("삭제 에러!");
+				}
+			});
+		});
+		
+		
+		$(".more-icon").on("click", function() {
+			let postId = $(this).data("post-id");
+			
+			// 클린된 more icon의 post id가 
+			// deleteBtn 태그의 data-post-id 속성 값으로 들어 간다. 
+			
+			
+			$("#deleteBtn").data("post-id", postId);
+			
+			
+		});
 		
 		$(".comment-btn").on("click", function() {
 			
@@ -117,6 +165,28 @@
 				}
 				, error:function() {
 					alert("댓글 쓰기 에러");
+				}
+			});
+			
+		});
+		
+		$(".unlike-icon").on("click", function() {
+			
+			let postId = $(this).data("post-id");
+			
+			$.ajax({
+				type:"delete"
+				, url:"/post/unlike"
+				, data:{"postId":postId}
+				, success:function(data) {
+					if(data.result == "success") {
+						location.reload();
+					} else {
+						alert("좋아요 취소 실패");
+					}
+				}
+				, error:function() {
+					alert("좋아요 취소 에러");
 				}
 			});
 			

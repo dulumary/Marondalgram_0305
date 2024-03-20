@@ -2,6 +2,7 @@ package com.marondal.marondalgram.post.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -79,6 +80,25 @@ public class PostService {
 		
 		return postDetailList;
 		
+		
+	}
+	
+	public Post deletePost(int id) {
+		
+		Optional<Post> optionalPost = postRepository.findById(id);
+		Post post = optionalPost.orElse(null);
+		
+		if(post != null) {
+			// 게시글 좋아요 데이터 삭제
+			likeService.deleteLikeByPostId(id);
+			// 게시글 댓글 데이터 삭제
+			commentService.deleteCommentByPostId(id);
+			
+			FileManager.removeFile(post.getImagePath());
+			postRepository.delete(post);
+		}
+		
+		return post;
 		
 	}
 
