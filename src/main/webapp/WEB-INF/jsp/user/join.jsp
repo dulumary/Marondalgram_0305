@@ -162,8 +162,9 @@
 						alert("회원가입 실패");
 					}
 				}
-				, error:function() {
-					alert("회원가입 에러");
+				, error:function(request) {
+					
+					alert(request.responseJSON.message);
 				}
 			});
 			

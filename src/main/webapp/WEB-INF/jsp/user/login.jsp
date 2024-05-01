@@ -79,7 +79,8 @@
 					}
 					
 				}
-				, error:function() {
+				, error:function(e) {
+					console.log(e);
 					alert("로그인 에러");
 				}
 			});

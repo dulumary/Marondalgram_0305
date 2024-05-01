@@ -6,12 +6,15 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.multipart.MultipartFile;
 
 public class FileManager {
 	
 	public static final String FILE_UPLOAD_PATH = "D:\\dulumaryT\\web\\20231026\\springProject\\upload\\marondalgram";
 	
+	public static Logger logger = LoggerFactory.getLogger(FileManager.class);
 	
 	public static String saveFile(int userId, MultipartFile file) {
 		
@@ -30,6 +33,8 @@ public class FileManager {
 		
 		if(!directory.mkdir()) {
 			// 디렉토리 생성 실패
+			
+			logger.error("saveFile :: 디렉토리 생성 실패 - " + directoryPath);
 			return null;
 		}
 		
@@ -44,6 +49,7 @@ public class FileManager {
 			
 		} catch (IOException e) {
 		
+			logger.error("saveFile :: 파일 저장 실패 - " + filePath);
 			e.printStackTrace();
 			// 파일 저장 실패 
 			return null;

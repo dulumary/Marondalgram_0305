@@ -3,6 +3,8 @@ package com.marondal.marondalgram.post;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,6 +22,8 @@ import jakarta.servlet.http.HttpSession;
 @RequestMapping("/post")
 @RestController
 public class PostRestController {
+	
+	private Logger logger = LoggerFactory.getLogger(getClass());
 	
 	@Autowired
 	private PostService postService;
