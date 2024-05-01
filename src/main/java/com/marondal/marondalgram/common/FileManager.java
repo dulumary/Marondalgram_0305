@@ -12,6 +12,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 public class FileManager {
 	
+	
+	
 	public static final String FILE_UPLOAD_PATH = "D:\\dulumaryT\\web\\20231026\\springProject\\upload\\marondalgram";
 	
 	public static Logger logger = LoggerFactory.getLogger(FileManager.class);
